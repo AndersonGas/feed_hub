@@ -1,29 +1,37 @@
-import { useState } from 'react';
 function App() {
-  const [dadosCarregados, setDadosCarregados] = useState(false);
 
-  function carregarDados() {
-    console.log("Sincronização iniciada");
+  async function sincronizarDados() {
+    try {
+      const respostaUsuarios = await fetch(
+        'https://jsonplaceholder.typicode.com/users'
+      );
 
-    // Futuramente:
-    // 1. Buscar usuários da API
-    // 2. Buscar posts da API
-    // 3. Salvar no Supabase
+      const usuarios = await respostaUsuarios.json();
 
-    setDadosCarregados(true);
+      console.log("Usuários:", usuarios);
+
+
+      const respostaPosts = await fetch(
+        'https://jsonplaceholder.typicode.com/posts'
+      );
+
+      const posts = await respostaPosts.json();
+
+      console.log("Posts:", posts);
+
+    } catch (erro) {
+      console.log("Erro ao buscar dados:", erro);
+    }
   }
+
 
   return (
     <div>
       <h1>Portal de Dados</h1>
 
-      <button onClick={carregarDados}>
+      <button onClick={sincronizarDados}>
         Sincronizar Dados
       </button>
-
-      {dadosCarregados && (
-        <p>Dados carregados com sucesso!</p>
-      )}
     </div>
   );
 }
